@@ -124,6 +124,18 @@ cl /DSZX_USER_CODE_ONLY /EP MakeList.h &gt;&gt;Expand.c
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>echo #include ^"List.h^" &gt;MakeList.h
+echo MakeList^(char,free^) &gt;&gt;MakeList.h
+
+echo #include ^&lt;stdio.h^&gt; &gt;Expand.c
+echo #include ^&lt;stdlib.h^&gt; &gt;&gt;Expand.c
+echo #include ^&lt;string.h^&gt; &gt;&gt;Expand.c
+cl /DSZX_USER_CODE_ONLY /EP MakeList.h &gt;&gt;Expand.c
+
+"C:\Program Files\LLVM\bin\clang-format" Expand.c &gt;MakeList.h
+</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

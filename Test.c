@@ -1,7 +1,7 @@
 #include "Test.h"
 
 void Test_delete(Test *p) {
-    List_delete(double)(p->darr);
+    List_delete_deep(double)(p->darr);
     free(p);
 }
 
@@ -22,5 +22,5 @@ void f(Test *test) {
 
     printf("%d, %lf\n", q->i, *List_get(double)(test->darr, 0));
 
-    List_delete(Test)(arr);
+    List_delete_deep(Test)(arr);
 }

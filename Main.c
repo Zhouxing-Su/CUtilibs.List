@@ -26,10 +26,10 @@ int main() {
 
     f(&test);
 
-    List_delete(double)(test.darr);
+    List_delete_deep(double)(test.darr);
 
     List_resize_deep(int)(arr, 1);
-    List_delete(int)(arr); // crash when trying to free &j.
+    List_delete_shallow(int)(arr); // List_delete_deep() will crash when trying to free &j.
 
     return 0;
 }

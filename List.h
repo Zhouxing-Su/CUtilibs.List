@@ -19,6 +19,7 @@
 ///         3.  the remove() will change the order of the list.
 ///         4.  associate copy constructor like the destructor?
 ///         5.  deep copy/remove/merge is to be implemented.
+///         6.  deep resize will not invoke constructor if new size becomes greater.
 ///
 /// example :
 ///         void freeIntPtr(int *p) { free(p); }
@@ -74,7 +75,8 @@ enum { List_Nullptr = (int)NULL };
 
 /// public member methods.
 #define List_new(ItemType)  _public_List_##ItemType##_new
-#define List_delete(ItemType)  _public_List_##ItemType##_delete
+#define List_delete_shallow(ItemType)  _public_List_##ItemType##_delete_shallow
+#define List_delete_deep(ItemType)  _public_List_##ItemType##_delete_deep
 #define List_reserve(ItemType)  _public_List_##ItemType##_reserve
 #define List_resize_shallow(ItemType)  _public_List_##ItemType##_resize_shallow
 #define List_resize_deep(ItemType)  _public_List_##ItemType##_resize_deep
@@ -138,10 +140,13 @@ static _public_List_##ItemType* _public_List_##ItemType##_new() {\
     return list;\
 }\
 \
-static void _public_List_##ItemType##_delete(_public_List_##ItemType *list) {\
-    _private_List_##ItemType##_deleteItems(list, 0, list->length);\
+static void _public_List_##ItemType##_delete_shallow(_public_List_##ItemType *list) {\
     free(list->data);\
     free(list);\
+}\
+static void _public_List_##ItemType##_delete_deep(_public_List_##ItemType *list) {\
+    _private_List_##ItemType##_deleteItems(list, 0, list->length);\
+    _public_List_##ItemType##_delete_shallow(list);\
 }\
 \
 static void _public_List_##ItemType##_reserve(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType newCapacity) {\
@@ -182,7 +187,6 @@ static _public_List_##ItemType##_SizeType _public_List_##ItemType##_find(_public
     }\
     return List_InvalidIndex;\
 }\
-\
 \
 static void _public_List_##ItemType##_pushback(_public_List_##ItemType *list, _public_List_##ItemType##_ItemPtr pItem) {\
     if (list->length == list->capacity) { _public_List_##ItemType##_reserve(list, list->length * 2); }\
