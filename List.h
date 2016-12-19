@@ -107,18 +107,18 @@ typedef void (*_public_List_##ItemType##_Destructor)(_public_List_##ItemType##_I
 \
 /* class template. */\
 typedef struct _public_List_##ItemType{\
-    _public_List_##ItemType##_SizeType length;\
+    _public_List_##ItemType##_SizeType size;\
     _public_List_##ItemType##_SizeType capacity;\
     ItemType **data;\
 } _public_List_##ItemType;\
 \
 /* private methods. */\
 static Bool _private_List_##ItemType##_indexValid(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType index) {\
-    return ((0 <= index) && (index < list->length));\
+    return ((0 <= index) && (index < list->size));\
 }\
 \
 static Bool _private_List_##ItemType##_newIndexValid(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType index) {\
-    return ((0 <= index) && (index <= list->length));\
+    return ((0 <= index) && (index <= list->size));\
 }\
 \
 static void _private_List_##ItemType##_deleteItems(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType begin, _public_List_##ItemType##_SizeType end) {\
@@ -138,7 +138,7 @@ static void _private_List_##ItemType##_swapItems(_public_List_##ItemType *list, 
 static _public_List_##ItemType* _public_List_##ItemType##_new() {\
     _public_List_##ItemType *list = (_public_List_##ItemType*)malloc(sizeof(_public_List_##ItemType));\
     list->capacity = 0;\
-    list->length = 0;\
+    list->size = 0;\
     list->data = (_public_List_##ItemType##_ItemPtr*)List_Nullptr;\
     return list;\
 }\
@@ -148,7 +148,7 @@ static void _public_List_##ItemType##_delete_shallow(_public_List_##ItemType *li
     free(list);\
 }\
 static void _public_List_##ItemType##_delete_deep(_public_List_##ItemType *list) {\
-    _private_List_##ItemType##_deleteItems(list, 0, list->length);\
+    _private_List_##ItemType##_deleteItems(list, 0, list->size);\
     _public_List_##ItemType##_delete_shallow(list);\
 }\
 \
@@ -160,16 +160,16 @@ static void _public_List_##ItemType##_reserve(_public_List_##ItemType *list, _pu
 \
 static void _public_List_##ItemType##_resize_shallow(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType newSize) {\
     _public_List_##ItemType##_reserve(list, newSize);\
-    list->length = newSize;\
+    list->size = newSize;\
 }\
 \
 static void _public_List_##ItemType##_resize_deep(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType newSize) {\
-    _private_List_##ItemType##_deleteItems(list, newSize, list->length);\
+    _private_List_##ItemType##_deleteItems(list, newSize, list->size);\
     _public_List_##ItemType##_resize_shallow(list, newSize);\
 }\
 \
 static Bool _public_List_##ItemType##_empty(_public_List_##ItemType *list) {\
-    return (list->length == 0);\
+    return (list->size == 0);\
 }\
 \
 static _public_List_##ItemType##_ItemPtr _public_List_##ItemType##_get(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType index) {\
@@ -185,63 +185,63 @@ static Bool _public_List_##ItemType##_set(_public_List_##ItemType *list, _public
 \
 static _public_List_##ItemType##_SizeType _public_List_##ItemType##_find(_public_List_##ItemType *list, _public_List_##ItemType##_ItemPtr pItem) {\
     _public_List_##ItemType##_SizeType i;\
-    for (i = 0; i < list->length; ++i) {\
+    for (i = 0; i < list->size; ++i) {\
         if (list->data[i] == pItem) { return i; }\
     }\
     return List_InvalidIndex;\
 }\
 \
 static void _public_List_##ItemType##_pushback(_public_List_##ItemType *list, _public_List_##ItemType##_ItemPtr pItem) {\
-    if (list->length == list->capacity) { _public_List_##ItemType##_reserve(list, list->length * 2); }\
-    list->data[list->length] = pItem;\
-    ++list->length;\
+    if (list->size == list->capacity) { _public_List_##ItemType##_reserve(list, list->size * 2); }\
+    list->data[list->size] = pItem;\
+    ++list->size;\
 }\
 \
 static Bool _public_List_##ItemType##_insert(_public_List_##ItemType *list, _public_List_##ItemType##_ItemPtr pItem, _public_List_##ItemType##_SizeType index) {\
     _public_List_##ItemType##_SizeType i;\
     if (!_private_List_##ItemType##_newIndexValid(list, index)) { return False; }\
-    if (list->length == list->capacity) { _public_List_##ItemType##_reserve(list, list->capacity * 2); }\
-    for (i = list->length; i > index; --i) { list->data[i] = list->data[i - 1]; }\
+    if (list->size == list->capacity) { _public_List_##ItemType##_reserve(list, list->capacity * 2); }\
+    for (i = list->size; i > index; --i) { list->data[i] = list->data[i - 1]; }\
     list->data[index] = pItem;\
-    ++list->length;\
+    ++list->size;\
     return True;\
 }\
 \
 static void _public_List_##ItemType##_clear_shallow(_public_List_##ItemType *list) {\
-    list->length = 0;\
+    list->size = 0;\
 }\
 static void _public_List_##ItemType##_clear_deep(_public_List_##ItemType *list) {\
     _public_List_##ItemType##_resize_deep(list, 0);\
 }\
 \
 static void _public_List_##ItemType##_copy_shallow(_public_List_##ItemType *srcList, _public_List_##ItemType *dstList) {\
-    _public_List_##ItemType##_resize_shallow(dstList, srcList->length);\
-    dstList->length = srcList->length;\
-    memcpy(dstList->data, srcList->data, srcList->length * sizeof(_public_List_##ItemType##_ItemPtr));\
+    _public_List_##ItemType##_resize_shallow(dstList, srcList->size);\
+    dstList->size = srcList->size;\
+    memcpy(dstList->data, srcList->data, srcList->size * sizeof(_public_List_##ItemType##_ItemPtr));\
 }\
 \
 static void _public_List_##ItemType##_remove_shallow(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType index) {\
     if (!_private_List_##ItemType##_indexValid(list, index)) { return; }\
 \
-    list->data[index] = list->data[list->length - 1];\
-    --list->length;\
+    list->data[index] = list->data[list->size - 1];\
+    --list->size;\
 }\
 \
 static void _public_List_##ItemType##_merge_shallow(_public_List_##ItemType *listA, _public_List_##ItemType *listB) {\
-    _public_List_##ItemType##_resize_shallow(listA, listA->length + listB->length);\
-    memcpy(listA->data + listA->length, listB->data, sizeof(_public_List_##ItemType##_ItemPtr) * listB->length);\
+    _public_List_##ItemType##_resize_shallow(listA, listA->size + listB->size);\
+    memcpy(listA->data + listA->size, listB->data, sizeof(_public_List_##ItemType##_ItemPtr) * listB->size);\
 }\
 \
 static void _public_List_##ItemType##_reverse(_public_List_##ItemType *list) {\
     _public_List_##ItemType##_SizeType i, j;\
-    for (i = 0, j = list->length - 1; i < j; ++i, --j) {\
+    for (i = 0, j = list->size - 1; i < j; ++i, --j) {\
         _private_List_##ItemType##_swapItems(list, i, j);\
     }\
 }\
 \
 static void _public_List_##ItemType##_shuffle(_public_List_##ItemType *list) {\
     _public_List_##ItemType##_SizeType i;\
-    for (i = list->length; i > 1; --i) {\
+    for (i = list->size; i > 1; --i) {\
         _private_List_##ItemType##_swapItems(list, (i - 1), (rand() % i));\
     }\
 }
