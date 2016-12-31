@@ -24,7 +24,10 @@
 /// example :
 ///         void freeIntPtr(int *p) { free(p); }
 ///         
+///         #ifndef SZX_CUTILIBS_LIST_MAKE_INT
+///         #define SZX_CUTILIBS_LIST_MAKE_INT
 ///         MakeList(int,freeIntPtr)
+///         #endif // !SZX_CUTILIBS_LIST_MAKE_INT
 ///         
 ///         void f() {
 ///             List_SizeType(int) i = 0;
@@ -47,8 +50,8 @@
 ////////////////////////////////
 
 
-#ifndef SZX_CUTILIBS_ARR_H
-#define SZX_CUTILIBS_ARR_H
+#ifndef SZX_CUTILIBS_LIST_H
+#define SZX_CUTILIBS_LIST_H
 
 
 #ifndef SZX_USER_CODE_ONLY
@@ -243,4 +246,4 @@ static void _public_List_##ItemType##_shuffle(_public_List_##ItemType *list) {\
     }\
 }
 
-#endif // SZX_CUTILIBS_ARR_H
+#endif // SZX_CUTILIBS_LIST_H
