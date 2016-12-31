@@ -62,8 +62,11 @@
 
 
 /// helper types.
-typedef int Bool;
-enum { False = 0, True = 1 };
+// you should be very careful when using this emulation of boolean type.
+// it will be fine when this Bool variables work independently,
+// i.e., True, False, !True, !False will behave as you wish.
+// but a non-zero Bool variable may not always be 1 and equal to True.
+typedef enum { False = 0, True = 1 } Bool;
 enum { List_InvalidIndex = -1 };
 enum { List_Nullptr = (int)NULL };
 
