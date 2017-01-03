@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef int Bool;
-enum { False = 0, True = 1 };
+typedef enum { False = 0, True = 1 } Bool;
 enum { List_InvalidIndex = -1 };
+enum { List_DefaultLength = 4 };
 enum { List_Nullptr = (int)NULL };
 
 typedef int _public_List_char_SizeType;
@@ -109,6 +109,9 @@ _public_List_char_find(_public_List_char *list,
 }
 static void _public_List_char_pushback(_public_List_char *list,
                                        _public_List_char_ItemPtr pItem) {
+  if (list->capacity <= 0) {
+    _public_List_char_reserve(list, List_DefaultLength);
+  }
   if (list->size == list->capacity) {
     _public_List_char_reserve(list, list->size * 2);
   }

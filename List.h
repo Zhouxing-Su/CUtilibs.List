@@ -68,6 +68,7 @@
 // but a non-zero Bool variable may not always be 1 and equal to True.
 typedef enum { False = 0, True = 1 } Bool;
 enum { List_InvalidIndex = -1 };
+enum { List_DefaultLength = 4 };
 enum { List_Nullptr = (int)NULL };
 
 
@@ -195,6 +196,7 @@ static _public_List_##ItemType##_SizeType _public_List_##ItemType##_find(_public
 }\
 \
 static void _public_List_##ItemType##_pushback(_public_List_##ItemType *list, _public_List_##ItemType##_ItemPtr pItem) {\
+    if (list->capacity <= 0) { _public_List_##ItemType##_reserve(list, List_DefaultLength); }\
     if (list->size == list->capacity) { _public_List_##ItemType##_reserve(list, list->size * 2); }\
     list->data[list->size] = pItem;\
     ++list->size;\
