@@ -177,7 +177,7 @@ static Bool _public_List_##ItemType##_empty(_public_List_##ItemType *list) {\
 }\
 \
 static _public_List_##ItemType##_ItemPtr _public_List_##ItemType##_get(_public_List_##ItemType *list, _public_List_##ItemType##_SizeType index) {\
-    if (!_private_List_##ItemType##_indexValid(list, index)) { return NULL; }\
+    if (!_private_List_##ItemType##_indexValid(list, index)) { return (_public_List_##ItemType##_ItemPtr)List_Nullptr; }\
     return list->data[index];\
 }\
 \
