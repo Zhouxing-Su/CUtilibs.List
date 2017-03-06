@@ -96,7 +96,7 @@ enum { List_Nullptr = (int)NULL };
 #define List_clear_shallow(ItemType)  _public_List_##ItemType##_clear_shallow
 #define List_clear_deep(ItemType)  _public_List_##ItemType##List_clear_deep
 #define List_copy_shallow(ItemType)  _public_List_##ItemType##_copy_shallow
-#define List_remove_shallow(ItemType)  _public_List_##ItemType##remove_shallow
+#define List_remove_shallow(ItemType)  _public_List_##ItemType##_remove_shallow
 #define List_merge_shallow(ItemType)  _public_List_##ItemType##_merge_shallow
 #define List_reverse(ItemType)  _public_List_##ItemType##_reverse
 #define List_shuffle(ItemType)  _public_List_##ItemType##_shuffle
